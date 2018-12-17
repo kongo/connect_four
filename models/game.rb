@@ -58,10 +58,6 @@ class Game
 
   private
 
-  def max_index
-    board_size - 1
-  end
-
   def check_winner col, row, player
     lines = [
       @board.column(col),
