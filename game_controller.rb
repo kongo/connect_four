@@ -7,7 +7,7 @@ class GameController
 
   def initialize(game)
     @game         = game
-    @column_range = "1-#{game.board_size}"
+    @column_range = "1-#{game.board_size_columns}"
     @prompt       = TTY::Prompt.new
     @cursor       = TTY::Cursor
   end
@@ -35,7 +35,7 @@ class GameController
   end
 
   def print_board
-    table = TTY::Table.new (1..@game.board_size).to_a, board_to_string(@game.board)
+    table = TTY::Table.new (1..@game.board_size_columns).to_a, board_to_string(@game.board)
     puts table.render(:unicode)
   end
 
