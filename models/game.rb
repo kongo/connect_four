@@ -21,12 +21,12 @@ class Game
   end
 
   extend Forwardable
-  delegate board_size: :@board
+  delegate board_size_columns: :@board
+  delegate board_size_rows: :@board
 
   def board
-    max_index = @board.board_size - 1
-    data = (0..max_index).map { |i|
-      (0..max_index).map { |j| @board.to_a[j][max_index-i] }
+    data = (0..(board_size_rows-1)).map { |i|
+      (0..(board_size_columns-1)).map { |j| @board.to_a[j][board_size_rows-1-i] }
     }
   end
 
@@ -80,7 +80,7 @@ class Game
 
   def line_contains_goal?(line, value)
     return false if line.length < GOAL
-    targets = (0..(max_index - GOAL )).map { |i| line[i, GOAL] }
+    targets = (0..(line.length - GOAL )).map { |i| line[i, GOAL] }
     targets.any? { |target| target.length == GOAL && target.uniq == [value] }
   end
 

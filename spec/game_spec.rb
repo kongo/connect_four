@@ -2,7 +2,7 @@ require_relative '../models/game.rb'
 require_relative '../models/board.rb'
 
 RSpec.describe Game do
-  let(:game) { Game.new board: Board.new(size: 7) }
+  let(:game) { Game.new board: Board.new(columns: 7, rows: 6) }
 
   describe "#new" do
     it "creates game where RED moves first" do
@@ -14,7 +14,7 @@ RSpec.describe Game do
 
     context "given column without available cells" do
       it "raises exception" do
-        game.board_size.times { game.move(1) } 
+        game.board_size_rows.times { game.move(1) } 
         expect{ game.move(1) }.to raise_error Game::ColumnFullError
       end
     end
