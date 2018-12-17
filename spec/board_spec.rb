@@ -1,15 +1,17 @@
 require_relative '../models/board.rb'
 
 RSpec.describe Board do
-  let(:board) { Board.new size: 5 }
+  let(:board) { Board.new columns: 7, rows: 6 }
 
   before do
     board.instance_variable_set :@cells, [
-      %w(a b c d e),
-      %w(f g h i j),
-      %w(k l m n o),
-      %w(p q r s t),
-      %w(u v w x y)
+      %w(a b c d e 1),
+      %w(f g h i j 2),
+      %w(k l m n o 3),
+      %w(p q r s t 4),
+      %w(u v w x y 5),
+      %w(a s d f g h),
+      %w(6 7 8 9 0 f)
     ]
   end
 
@@ -21,27 +23,27 @@ RSpec.describe Board do
 
   describe "#column" do
     it "provides column with the specified index" do
-      expect(board.column(3)).to eq(%w(p q r s t))
+      expect(board.column(3)).to eq(%w(p q r s t 4))
     end
   end
 
   describe "#row" do
     it "provides row with the specified index" do
-      expect(board.row(2)).to eq(%w(c h m r w))
+      expect(board.row(2)).to eq(%w(c h m r w d 8))
     end
   end
 
   describe "#diagonal_1" do
     context "given target on the main diagonal" do
       it "picks diagonal from top left to bottom right" do
-        expect(board.diagonal_1(2, 2)).to eq( %w(a g m s y) )
+        expect(board.diagonal_1(2, 2)).to eq( %w(a g m s y h) )
       end
     end
 
     context "given target off the main diagonal" do
       it "picks diagonal from top left to bottom right" do
-        expect(board.diagonal_1(1, 4)).to eq( %w(d j) )
-        expect(board.diagonal_1(3, 2)).to eq( %w(f l r x) )
+        expect(board.diagonal_1(1, 4)).to eq( %w(d j 3) )
+        expect(board.diagonal_1(3, 2)).to eq( %w(f l r x g) )
       end
     end
 
@@ -56,14 +58,14 @@ RSpec.describe Board do
 
     context "given target off the main diagonal" do
       it "picks diagonal from bottom left to top right" do
-        expect(board.diagonal_2(3, 4)).to eq( %w(x t) )
-        expect(board.diagonal_2(3, 2)).to eq( %w(v r n j) )
+        expect(board.diagonal_2(3, 4)).to eq( %w(7 d x t 3) )
+        expect(board.diagonal_2(3, 2)).to eq( %w(a v r n j 1) )
       end
     end
   end
 
   describe "#full?" do
-    let(:board) { Board.new size: 7 }
+    let(:board) { Board.new columns: 7, rows: 7 }
 
     it "returns true when no free cells are left" do
       cells_data_full = %w(
@@ -95,7 +97,7 @@ RSpec.describe Board do
   end
 
   describe "#empty_cell_in_column_index" do
-    let(:board) { Board.new size: 3 }
+    let(:board) { Board.new columns: 3, rows: 3 }
     before do
       fill_board_cells board, %w(
           1 1 nil

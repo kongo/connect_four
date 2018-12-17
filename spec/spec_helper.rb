@@ -99,12 +99,11 @@ RSpec.configure do |config|
   # as the one that triggered the failure.
   Kernel.srand config.seed
 =end
-  def fill_board_cells(board, cells_data_string_vector)
-    cells_data_vector = cells_data_string_vector.map { |s| eval s }
-    cells_data_lines = cells_data_vector.each_slice(board.board_size).to_a
-    max_index = board.board_size - 1
-    data = (0..max_index).map { |i|
-      (0..max_index).map { |j| cells_data_lines[j][i] }
+  def fill_board_cells(board, cells_data_string_vector, should_eval = true)
+    cells_data_vector = cells_data_string_vector.map { |s| should_eval ? eval(s) : s }
+    cells_data_lines = cells_data_vector.each_slice(board.board_size_columns).to_a
+    data = (0..board.board_size_columns - 1).map { |i|
+      (0..board.board_size_rows - 1).map { |j| cells_data_lines[j][i] }
     }
     board.instance_variable_set :@cells, data
   end

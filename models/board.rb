@@ -1,9 +1,10 @@
 class Board
 
-  attr_reader :board_size
+  attr_reader :board_size_columns, :board_size_rows
 
-  def initialize(size: 7)
-    @board_size = size
+  def initialize(columns: 7, rows: 6)
+    @board_size_columns = columns
+    @board_size_rows    = rows
     init_cells
   end
 
@@ -26,7 +27,10 @@ class Board
   def diagonal_1(column_number, row_number)
     subtract    = [column_number, row_number].min
     source_cell = [column_number - subtract, row_number - subtract]
-    steps       = @board_size - source_cell.max
+    steps       = [
+      @board_size_columns - source_cell[0] - 1,
+      @board_size_rows    - source_cell[1]
+    ].min
 
     (0..steps-1).reduce([]) { |a, i|
       a << @cells[source_cell[0] + i][source_cell[1] + i]
@@ -35,9 +39,12 @@ class Board
   end
 
   def diagonal_2(column_number, row_number)
-    subtract    = [@board_size - column_number - 1, row_number].min
+    subtract    = [board_size_columns - 1 - column_number, row_number].min
     source_cell = [column_number + subtract, row_number - subtract]
-    steps       = @board_size - source_cell.min
+    steps       = [
+      source_cell[0] + 1,
+      @board_size_rows - source_cell[1]
+    ].min
 
     (0..steps-1).reduce([]) { |a, i|
       a << @cells[source_cell[0] - i][source_cell[1] + i]
@@ -56,8 +63,9 @@ class Board
   private
 
   def init_cells
-    size_enum = 1..@board_size
-    @cells = size_enum.map { size_enum.map { nil } } 
+    @cells = (1..@board_size_columns).map {
+      (1..@board_size_rows).map { nil }
+    } 
   end
 
 end
